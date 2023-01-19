@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class MainManager : MonoBehaviour
     public static MainManager Instance;
 
     public string PlayerName;
+    public string HighScorePlayerName;
     public int HighScore;
 
 
@@ -22,18 +24,49 @@ public class MainManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        LoadHighScore();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    [System.Serializable]
+    class SaveData
     {
-       
+        public string HighScorePlayerName;
+        public int HighScore;
     }
 
-    private void Update()
+    public void SaveHighScore()
     {
-       
+        SaveData data = new SaveData();
+        data.HighScorePlayerName = HighScorePlayerName;
+        data.HighScore = HighScore;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
-   
+    public void LoadHighScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            HighScorePlayerName = data.HighScorePlayerName;
+            HighScore = data.HighScore;
+        }
+    }
+
+    public void ClearHighScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
+
 }

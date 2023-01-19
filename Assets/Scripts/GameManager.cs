@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        HighScoreText.text = $"High Score : {MainManager.Instance.PlayerName} : {MainManager.Instance.HighScore}";
+        HighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
 
     }
     // Update is called once per frame
@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviour
         if (m_Points> MainManager.Instance.HighScore)
             {
             MainManager.Instance.HighScore = m_Points;
+            MainManager.Instance.HighScorePlayerName = MainManager.Instance.PlayerName;
+
             HighScoreText.text = $"High Score : {MainManager.Instance.PlayerName} : {MainManager.Instance.HighScore}";
             }
 
