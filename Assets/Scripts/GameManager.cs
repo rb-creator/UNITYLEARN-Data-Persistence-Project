@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
 
     private bool m_Started = false;
     private int m_Points;
-    //private int m_HighScore;
    
 
     private bool m_GameOver = false;
