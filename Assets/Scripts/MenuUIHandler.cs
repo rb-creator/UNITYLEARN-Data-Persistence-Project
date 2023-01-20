@@ -13,13 +13,7 @@ public class MenuUIHandler : MonoBehaviour
 {
     public TMP_InputField PlayerName;
     public TMP_Text HighScoreText;
-    
-
-    public void PlayerNameChosen(string playerName)
-    {
-        //MainManager.Instance.PlayerName = playerName;
-    }
-
+   
     // Start is called before the first frame update
     void Start()
     {
