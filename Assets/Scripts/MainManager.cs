@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class MainManager : MonoBehaviour
 {
-    public static MainManager Instance;
+    private static MainManager _instance;
+    public static MainManager Instance { get { return _instance; } }
 
     public string PlayerName;
     public string HighScorePlayerName;
@@ -16,16 +18,20 @@ public class MainManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        ImplementSingleton();
+        LoadHighScore();
+    }
+    
+    private void ImplementSingleton()
+    {
+        if (_instance != null)
         {
             Destroy(gameObject);
             return;
         }
 
-        Instance = this;
+        _instance = this;
         DontDestroyOnLoad(gameObject);
-
-        LoadHighScore();
     }
 
     [System.Serializable]
@@ -67,6 +73,5 @@ public class MainManager : MonoBehaviour
             File.Delete(path);
         }
     }
-
 
 }

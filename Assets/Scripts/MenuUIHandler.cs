@@ -12,20 +12,36 @@ using UnityEditor;
 public class MenuUIHandler : MonoBehaviour
 {
     public TMP_InputField PlayerName;
-    public TMP_Text HighScoreText;
-   
+    public TMP_Text MenuHighScoreText;
+
     // Start is called before the first frame update
     void Start()
     {
-        HighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
+        DisplayHighScoreText();
     }
 
-    public void StartNew()
+    // Update is called once per frame
+    void Update()
+    { 
+       SavePlayerNameInput();
+    }
+
+    private void DisplayHighScoreText()
+    {
+        MenuHighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
+    }
+
+    private void SavePlayerNameInput()
+    {
+        MainManager.Instance.PlayerName = PlayerName.text;
+    }
+
+    private void StartNew()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void Exit()
+    private void Exit()
     {
         MainManager.Instance.SaveHighScore();
 
@@ -36,17 +52,12 @@ public class MenuUIHandler : MonoBehaviour
 #endif
     }
 
-    public void ClearHighScore()
+    private void ClearHighScore()
     {
         MainManager.Instance.HighScorePlayerName= null;
         MainManager.Instance.HighScore = 0;
-        HighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
+        DisplayHighScoreText();
         MainManager.Instance.ClearHighScore();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        MainManager.Instance.PlayerName = PlayerName.text;
-    }
+  
 }

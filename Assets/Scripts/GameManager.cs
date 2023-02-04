@@ -14,17 +14,62 @@ public class GameManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
-    public Text HighScoreText;
+    public Text MainHighScoreText;
     public GameObject GameOverText;
 
     private bool m_Started = false;
     private int m_Points;
-   
-
+ 
     private bool m_GameOver = false;
 
     // Start is called before the first frame update
     void Start()
+    {
+        InstantiateBrickWall();
+        DisplayMainHighScoreText();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        InputController();
+    }
+
+    void DisplayMainHighScoreText()
+    {
+        MainHighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
+    }
+
+    void InputController()
+    {
+        if (!m_Started)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                m_Started = true;
+                float randomDirection = Random.Range(-1.0f, 1.0f);
+                Vector3 forceDir = new Vector3(randomDirection, 1, 0);
+                forceDir.Normalize();
+
+                Ball.transform.SetParent(null);
+                Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+            }
+        }
+        else if (m_GameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
+    }
+
+    void InstantiateBrickWall()
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -40,58 +85,24 @@ public class GameManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-        
-        HighScoreText.text = $"High Score : {MainManager.Instance.HighScorePlayerName} : {MainManager.Instance.HighScore}";
-
     }
-    // Update is called once per frame
-    void Update()
+
+    void AddPoint(int point)
     {
-            if (!m_Started)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    m_Started = true;
-                    float randomDirection = Random.Range(-1.0f, 1.0f);
-                    Vector3 forceDir = new Vector3(randomDirection, 1, 0);
-                    forceDir.Normalize();
-
-                    Ball.transform.SetParent(null);
-                    Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
-                }
-            }
-            else if (m_GameOver)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    SceneManager.LoadScene(0);
-                }
-            }
-    }
-
-        void AddPoint(int point)
-        {
             m_Points += point;
             ScoreText.text = $"Score : {m_Points}";
-        }
+    }
 
-        public void GameOver()
-        {
+    public void GameOver()
+    {
             m_GameOver = true;
             GameOverText.SetActive(true);
 
         if (m_Points> MainManager.Instance.HighScore)
-            {
+        {
             MainManager.Instance.HighScore = m_Points;
             MainManager.Instance.HighScorePlayerName = MainManager.Instance.PlayerName;
-
-            HighScoreText.text = $"High Score : {MainManager.Instance.PlayerName} : {MainManager.Instance.HighScore}";
-            }
-
+            DisplayMainHighScoreText();
         }
+    }
 }

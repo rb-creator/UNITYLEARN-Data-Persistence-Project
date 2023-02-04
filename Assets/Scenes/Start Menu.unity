@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerName: {fileID: 1471171799}
-  HighScoreText: {fileID: 1354940998}
+  MenuHighScoreText: {fileID: 1354940998}
 --- !u!1 &173331791
 GameObject:
   m_ObjectHideFlags: 0
